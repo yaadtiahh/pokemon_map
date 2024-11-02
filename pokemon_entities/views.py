@@ -85,11 +85,12 @@ def show_pokemon(request, pokemon_id):
             entity.lon,
             request.build_absolute_uri(photo)
         )
-    pokemon_bro = {
+    pokemon_parameters = {  # переназвать переменную
         'img_url': photo,
         'title_ru': pokemon.title,
+        'description': pokemon.description
 
     }
     return render(request, 'pokemon.html', context={
-        'map': folium_map._repr_html_(), 'pokemon': pokemon_bro
+        'map': folium_map._repr_html_(), 'pokemon': pokemon_parameters
     })
