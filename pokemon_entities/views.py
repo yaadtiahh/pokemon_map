@@ -88,6 +88,8 @@ def show_pokemon(request, pokemon_id):
     pokemon_parameters = {  # переназвать переменную
         'img_url': photo,
         'title_ru': pokemon.title,
+        'title_en': pokemon.title_en,
+        'title_jp': pokemon.title_jp,
         'description': pokemon.description
 
     }
