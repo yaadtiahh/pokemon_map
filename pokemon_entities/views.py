@@ -1,5 +1,4 @@
 import folium
-import json
 
 from django.http import HttpResponseNotFound
 from django.shortcuts import render
@@ -87,7 +86,11 @@ def show_pokemon(request, pokemon_id):
         )
 
     previous_evolution = {}
+    next_evolution = {}
+
     previous_pokemon = pokemon.previous_evolution
+    next_pokemon = pokemon.next_evolution.first()
+
     if previous_pokemon:
 
         previous_pokemon_photo = ''
@@ -100,13 +103,26 @@ def show_pokemon(request, pokemon_id):
             'pokemon_id': previous_pokemon.id,
         }
 
+    if next_pokemon:
+
+        next_pokemon_photo = ''
+        if next_pokemon.photo:
+            next_pokemon_photo = next_pokemon.photo.url
+
+        next_evolution = {
+            'img_url': next_pokemon_photo,
+            'title_ru': next_pokemon.title,
+            'pokemon_id': next_pokemon.id,
+        }
+
     pokemon_parameters = {  # переназвать переменную
         'img_url': photo,
         'title_ru': pokemon.title,
         'title_en': pokemon.title_en,
         'title_jp': pokemon.title_jp,
         'description': pokemon.description,
-        'previous_evolution': previous_evolution
+        'previous_evolution': previous_evolution,
+        'next_evolution': next_evolution
     }
 
     return render(request, 'pokemon.html', context={
