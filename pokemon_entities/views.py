@@ -1,7 +1,7 @@
 import folium
 
 from django.http import HttpResponseNotFound
-from django.shortcuts import render
+from django.shortcuts import render, get_list_or_404
 from django.utils.timezone import localtime, now
 from .models import Pokemon, PokemonEntity
 
@@ -33,24 +33,18 @@ def show_all_pokemons(request):
     pokemon_enties = PokemonEntity.objects.filter(appeared_at__lte=time_now, disappeared_at__gte=time_now)
 
     for entity in pokemon_enties:
-        photo = ''
-        if entity.pokemon.photo:
-            photo = entity.pokemon.photo.url
         add_pokemon(
             folium_map, entity.lat,
             entity.lon,
-            request.build_absolute_uri(photo)
+            request.build_absolute_uri(pokemon_photo(entity.pokemon))
         )
 
     pokemons_on_page = []
     pokemons = Pokemon.objects.all()
     for pokemon in pokemons:
-        photo = ''
-        if pokemon.photo:
-            photo = pokemon.photo.url
         pokemons_on_page.append({
             'pokemon_id': pokemon.id,
-            'img_url': photo,
+            'img_url': pokemon_photo(pokemon),
             'title_ru': pokemon.title,
         })
 
@@ -61,7 +55,7 @@ def show_all_pokemons(request):
 
 
 def show_pokemon(request, pokemon_id):
-    pokemons = Pokemon.objects.filter(id=pokemon_id)
+    pokemons = get_list_or_404(Pokemon, id=pokemon_id)
     for pokemon in pokemons:
         if pokemon.id == int(pokemon_id):
             requested_pokemon = pokemon
