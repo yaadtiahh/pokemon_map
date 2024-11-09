@@ -15,7 +15,7 @@ class Pokemon(models.Model):
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        related_name="next_evolution",
+        related_name="next_evolutions",
         verbose_name='Эволюция'
     )
 
@@ -40,7 +40,9 @@ class PokemonEntity(models.Model):
     pokemon = models.ForeignKey(
         Pokemon,
         on_delete=models.CASCADE,
-        verbose_name='Покемон'
+        verbose_name='Покемон',
+        related_name="entities",
+        null=True
     )
 
     def __str__(self):
