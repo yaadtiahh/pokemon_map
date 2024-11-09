@@ -90,24 +90,16 @@ def show_pokemon(request, pokemon_id):
 
     if previous_pokemon:
 
-        previous_pokemon_photo = ''
-        if previous_pokemon.photo:
-            previous_pokemon_photo = previous_pokemon.photo.url
-
         previous_evolution = {
-            'img_url': previous_pokemon_photo,
+            'img_url': pokemon_photo(previous_evolution),
             'title_ru': previous_pokemon.title,
             'pokemon_id': previous_pokemon.id,
         }
 
     if next_pokemon:
 
-        next_pokemon_photo = ''
-        if next_pokemon.photo:
-            next_pokemon_photo = next_pokemon.photo.url
-
         next_evolution = {
-            'img_url': next_pokemon_photo,
+            'img_url': pokemon_photo(next_pokemon),
             'title_ru': next_pokemon.title,
             'pokemon_id': next_pokemon.id,
         }
@@ -125,3 +117,10 @@ def show_pokemon(request, pokemon_id):
     return render(request, 'pokemon.html', context={
         'map': folium_map._repr_html_(), 'pokemon': pokemon_parameters
     })
+
+
+def pokemon_photo(pokemon):
+    pokemon_photo = ''
+    if pokemon.photo:
+        pokemon_photo = pokemon.photo.url
+    return pokemon_photo
