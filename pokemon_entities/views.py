@@ -73,13 +73,10 @@ def show_pokemon(request, pokemon_id):
 
     pokemon_enties = PokemonEntity.objects.filter(pokemon=requested_pokemon)
     for entity in pokemon_enties:
-        photo = ''
-        if entity.pokemon.photo:
-            photo = entity.pokemon.photo.url
         add_pokemon(
             folium_map, entity.lat,
             entity.lon,
-            request.build_absolute_uri(photo)
+            request.build_absolute_uri(pokemon_photo(entity.pokemon))
         )
 
     previous_evolution = {}
@@ -91,7 +88,7 @@ def show_pokemon(request, pokemon_id):
     if previous_pokemon:
 
         previous_evolution = {
-            'img_url': pokemon_photo(previous_evolution),
+            'img_url': pokemon_photo(previous_pokemon),
             'title_ru': previous_pokemon.title,
             'pokemon_id': previous_pokemon.id,
         }
@@ -105,7 +102,7 @@ def show_pokemon(request, pokemon_id):
         }
 
     pokemon_parameters = {
-        'img_url': photo,
+        'img_url': pokemon_photo(entity.pokemon),
         'title_ru': pokemon.title,
         'title_en': pokemon.title_en,
         'title_jp': pokemon.title_jp,
