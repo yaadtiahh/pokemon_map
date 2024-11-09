@@ -20,7 +20,7 @@ class Pokemon(models.Model):
     )
 
     def __str__(self):
-        return '{}'.format(self.title)
+        return str(self.title)
 
 
 class PokemonEntity(models.Model):
@@ -42,3 +42,6 @@ class PokemonEntity(models.Model):
         on_delete=models.CASCADE,
         verbose_name='Покемон'
     )
+
+    def __str__(self):
+        return str(self.pokemon)
