@@ -120,7 +120,7 @@ def show_pokemon(request, pokemon_id):
 
 
 def pokemon_photo(pokemon):
-    pokemon_photo = ''
+    pokemon_photo = DEFAULT_IMAGE_URL
     if pokemon.photo:
         pokemon_photo = pokemon.photo.url
     return pokemon_photo
