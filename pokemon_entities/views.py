@@ -29,9 +29,9 @@ def add_pokemon(folium_map, lat, lon, image_url=DEFAULT_IMAGE_URL):
 def show_all_pokemons(request):
     folium_map = folium.Map(location=MOSCOW_CENTER, zoom_start=12)
     time_now = localtime(now())
-    pokemon_entities = PokemonEntity.objects.filter(appeared_at__lte=time_now, disappeared_at__gte=time_now)
+    pokemon_enties = PokemonEntity.objects.filter(appeared_at__lte=time_now, disappeared_at__gte=time_now)
 
-    for entity in pokemon_entities:
+    for entity in pokemon_enties:
         add_pokemon(
             folium_map, entity.lat,
             entity.lon,
@@ -54,16 +54,11 @@ def show_all_pokemons(request):
 
 
 def show_pokemon(request, pokemon_id):
-    pokemons = get_list_or_404(Pokemon, id=pokemon_id)
-    for pokemon in pokemons:
-        if pokemon.id == int(pokemon_id):
-            requested_pokemon = pokemon
-            break
-
+    requested_pokemon = get_list_or_404(Pokemon, id=pokemon_id)[0]
     folium_map = folium.Map(location=MOSCOW_CENTER, zoom_start=12)
 
-    pokemon_entities = PokemonEntity.objects.filter(pokemon=requested_pokemon)
-    for entity in pokemon_entities:
+    pokemon_enties = PokemonEntity.objects.filter(pokemon=requested_pokemon)
+    for entity in pokemon_enties:
         add_pokemon(
             folium_map, entity.lat,
             entity.lon,
@@ -73,8 +68,8 @@ def show_pokemon(request, pokemon_id):
     previous_evolution = {}
     next_evolution = {}
 
-    previous_pokemon = pokemon.previous_evolution
-    next_pokemon = pokemon.next_evolutions.first()
+    previous_pokemon = requested_pokemon.previous_evolution
+    next_pokemon = requested_pokemon.next_evolutions.first()
 
     if previous_pokemon:
 
@@ -94,10 +89,10 @@ def show_pokemon(request, pokemon_id):
 
     pokemon_parameters = {
         'img_url': pokemon_photo(entity.pokemon),
-        'title_ru': pokemon.title,
-        'title_en': pokemon.title_en,
-        'title_jp': pokemon.title_jp,
-        'description': pokemon.description,
+        'title_ru': requested_pokemon.title,
+        'title_en': requested_pokemon.title_en,
+        'title_jp': requested_pokemon.title_jp,
+        'description': requested_pokemon.description,
         'previous_evolution': previous_evolution,
         'next_evolution': next_evolution
     }
